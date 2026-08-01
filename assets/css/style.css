@@ -1,0 +1,879 @@
+/* ---------- Schriften (lokal gehostet, DSGVO-konform) ----------
+   Inter – SIL Open Font License 1.1 (assets/fonts/OFL.txt)
+   IBM Plex Mono – SIL Open Font License 1.1 (assets/fonts/OFL-PlexMono.txt)
+
+   Rollenverteilung: Inter trägt Headlines und Fließtext,
+   Plex Mono trägt Timecodes, Labels und technische Angaben. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/plex-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/plex-mono-600.woff2") format("woff2");
+}
+
+:root {
+  /* Neutrales Schnittraum-Grau, an der DaVinci-Resolve-Oberfläche orientiert */
+  --bg: #222225;
+  --bg-lift: #2a2a2e;
+  --line: #45454d;
+  --line-soft: #34343a;
+  --text: #f2f2f4;
+  --text-muted: #a6a6af;
+  --text-faint: #8c8c96;
+  --accent: #43d9a3;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --radius: 2px;
+  --max-width: 1180px;
+  --gutter: 32px;
+  --header-height: 68px;
+  /* Harter Schnitt statt Überblendung */
+  --cut: 0.1s linear;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Absicherung gegen horizontalen Überlauf.
+     "clip" statt "hidden", weil hidden einen Scroll-Container erzeugt
+     und damit den sticky Header brechen kann. */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Schmalere Spur für Lesetext – bricht die Gleichbreite auf */
+.container--narrow {
+  max-width: 900px;
+}
+
+/* ---------- Timecode ---------- */
+.tc {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  background: rgba(34, 34, 37, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--cut);
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--text);
+}
+
+.nav-links a.active {
+  color: var(--accent);
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  cursor: pointer;
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color var(--cut), color var(--cut), border-color var(--cut);
+}
+
+.btn-primary {
+  color: var(--bg);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn-secondary {
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  border-color: var(--text);
+}
+
+/* ---------- Sektionen: harte Schnitte, variabler Rhythmus ----------
+   Trennlinien laufen über die volle Fensterbreite, nicht nur im Container. */
+section {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+section:last-of-type {
+  border-bottom: none;
+}
+
+.sec-pad-l { padding: 130px 0; }
+.sec-pad-m { padding: 96px 0; }
+.sec-pad-s { padding: 64px 0; }
+
+.section-head {
+  margin-bottom: 44px;
+}
+
+.section-head .tc {
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 120px 0 96px;
+}
+
+.hero > .container > .tc {
+  margin-bottom: 36px;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6.6vw, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.038em;
+  font-weight: 700;
+  margin: 0 0 30px;
+  max-width: 16ch;
+}
+
+.hero h1 .accent {
+  color: var(--accent);
+}
+
+.hero .subheadline {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 48ch;
+  margin: 0 0 40px;
+}
+
+/* ---------- Randabfallende Bildfläche (Cinemascope) ---------- */
+.bleed {
+  width: 100%;
+}
+
+.still {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2.39 / 1;
+  overflow: hidden;
+  background: var(--bg-lift);
+}
+
+.still img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Platzhalter, solange kein Bildmaterial vorliegt –
+   bewusst gestaltet, nicht "kaputtes Bild" */
+.still--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* oben keine Linie – die Hero-Sektion bringt sie bereits mit */
+  border-bottom: 1px solid var(--line-soft);
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 14px,
+      rgba(255, 255, 255, 0.03) 14px 28px
+    );
+}
+
+.still--placeholder .ph-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  /* muted statt faint: auf der helleren Flaeche sonst unter 4,5:1 */
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 2;
+  text-transform: uppercase;
+}
+
+.still--placeholder .ph-label strong {
+  display: block;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  padding: 12px var(--gutter) 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* innerhalb eines .container – der bringt die Ränder bereits mit */
+.caption--inline {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---------- Metadaten-Block (ersetzt die Statistik-Leiste) ---------- */
+.meta-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.meta-row dt {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding-top: 4px;
+}
+
+.meta-row dd {
+  margin: 0;
+  font-size: 1.02rem;
+  color: var(--text);
+}
+
+/* ---------- Lesetext ---------- */
+.lead {
+  font-size: 1.3rem;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+  max-width: 40ch;
+}
+
+.body-text {
+  color: var(--text-muted);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.body-text + .body-text {
+  margin-top: 20px;
+}
+
+/* ---------- Leistungen / Schwerpunkte ---------- */
+.service-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.service-item {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 24ch) minmax(0, 1fr);
+  gap: 32px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line-soft);
+  align-items: start;
+}
+
+.service-item .tc {
+  padding-top: 8px;
+}
+
+.service-item h3 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.service-item p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.section-cta {
+  margin-top: 48px;
+}
+
+/* ---------- Arbeiten (Kachelreihe) ---------- */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--line-soft);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.work-item {
+  background: var(--bg);
+  display: block;
+  transition: background-color var(--cut);
+}
+
+.work-item:hover,
+.work-item:focus-visible {
+  background: var(--bg-lift);
+}
+
+.work-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-lift);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 12px,
+      rgba(255, 255, 255, 0.03) 12px 24px
+    );
+}
+
+.work-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-thumb .ph-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.9;
+}
+
+.work-meta {
+  padding: 18px 20px 22px;
+}
+
+.work-meta .tc {
+  margin-bottom: 6px;
+}
+
+.work-meta h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+}
+
+/* ---------- Über mich ---------- */
+.profile-hero {
+  padding: 96px 0 80px;
+}
+
+.profile-hero .container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: 64px;
+  align-items: center;
+}
+
+.profile-photo {
+  width: 100%;
+  height: auto;
+  /* 16:9 – entspricht dem Bildformat, dadurch kein Beschnitt am Kopf */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.profile-figure {
+  margin: 0;
+}
+
+.profile-figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-top: 10px;
+}
+
+.profile-intro > .tc {
+  margin-bottom: 22px;
+}
+
+.profile-intro h1 {
+  font-size: clamp(2.3rem, 5vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.profile-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 26px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* ---------- Kontakt ---------- */
+.connect-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 64px;
+  align-items: start;
+}
+
+.connect-links {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 26px 0 0;
+  padding: 0;
+}
+
+.connect-links li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connect-links svg {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.connect-links a {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+  transition: color var(--cut), border-color var(--cut);
+}
+
+.connect-links a:hover,
+.connect-links a:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.connect-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.connect-qr img {
+  width: 126px;
+  height: 126px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: var(--radius);
+}
+
+.connect-qr span {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line-soft);
+  padding: 64px 0 36px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 52px;
+}
+
+.footer-brand .logo {
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+  max-width: 34ch;
+  margin: 0;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 18px;
+}
+
+.footer-col ul,
+.social-links,
+.legal-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.social-links a,
+.legal-links a {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  transition: color var(--cut);
+}
+
+.social-links a:hover,
+.social-links a:focus-visible,
+.legal-links a:hover,
+.legal-links a:focus-visible {
+  color: var(--text);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 26px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+/* ---------- Rechtsseiten ---------- */
+.legal-page {
+  padding: 64px 0 104px;
+}
+
+.legal-page .container {
+  max-width: 720px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 44px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--cut);
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--text);
+}
+
+.legal-page h1 {
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  margin: 0 0 44px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.legal-page h2 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 44px 0 14px;
+}
+
+.legal-page p,
+.legal-page li {
+  color: var(--text-muted);
+  font-size: 1rem;
+  max-width: 68ch;
+}
+
+.legal-page ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.legal-page li {
+  margin-bottom: 8px;
+}
+
+.legal-page a {
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  transition: color var(--cut), border-color var(--cut);
+}
+
+.legal-page a:hover,
+.legal-page a:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .sec-pad-l { padding: 84px 0; }
+  .sec-pad-m { padding: 68px 0; }
+  .sec-pad-s { padding: 52px 0; }
+
+  .hero {
+    padding: 72px 0 64px;
+  }
+
+  .profile-hero .container,
+  .connect-card {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .profile-figure {
+    order: -1;
+  }
+
+  .service-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 32px 0;
+  }
+
+  .meta-row {
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    max-width: 100%;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 22px;
+  }
+
+  .still {
+    /* auf dem Handy ist 2.39:1 zu flach */
+    aspect-ratio: 16 / 9;
+  }
+
+  .meta-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .hero > .container > .tc {
+    margin-bottom: 26px;
+  }
+
+  .nav-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+    color: var(--text);
+  }
+
+  .nav-links {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+
+  .nav-links li {
+    width: 100%;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 15px var(--gutter);
+  }
+
+  .nav-toggle:checked ~ nav .nav-links {
+    max-height: 320px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+}
