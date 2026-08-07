@@ -1,24 +1,29 @@
 /* ---------- Schriften (lokal gehostet, DSGVO-konform) ----------
-   Inter – SIL Open Font License 1.1 (assets/fonts/OFL.txt)
+   Sora – SIL Open Font License 1.1 (assets/fonts/OFL-Sora.txt)
    IBM Plex Mono – SIL Open Font License 1.1 (assets/fonts/OFL-PlexMono.txt)
 
-   Rollenverteilung: Inter trägt Headlines und Fließtext,
-   Plex Mono trägt Timecodes, Labels und technische Angaben. */
+   Sora liegt als Variable Font vor: eine Datei deckt 300–700 ab.
+   Rollenverteilung: Sora trägt Headlines, Fließtext und Navigation,
+   Plex Mono trägt Timecodes und technische Labels (tabellarische Ziffern).
+
+   WICHTIG: Nicht auf die Google-Fonts-CDN umstellen. Die dynamische
+   Einbindung überträgt die Besucher-IP in die USA; Abschnitt 5 der
+   Datenschutzerklärung sichert die lokale Auslieferung ausdrücklich zu. */
 @font-face {
-  font-family: "Inter";
+  font-family: "Sora";
   font-style: normal;
-  font-weight: 400 800;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/inter-latin-ext.woff2") format("woff2");
+  src: url("../fonts/sora-latin-ext.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
-  font-family: "Inter";
+  font-family: "Sora";
   font-style: normal;
-  font-weight: 400 800;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/inter-latin.woff2") format("woff2");
+  src: url("../fonts/sora-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -38,23 +43,50 @@
   src: url("../fonts/plex-mono-600.woff2") format("woff2");
 }
 
+/* ---------- Farbtokens ----------
+   Als HSL-Tripel notiert und per hsl(var(--token)) verwendet.
+   Nur Dark Mode, kein Light Mode.
+
+   Kontrast (WCAG AA, kleiner Text braucht 4,5:1):
+     foreground      auf hero-bg = 17,6:1
+     muted-foreground auf hero-bg =  6,5:1
+     text-faint      auf hero-bg =  5,3:1
+     primary         auf hero-bg = 11,2:1
+     primary-foreground auf primary = 12,0:1
+   Nach jeder Farbänderung nachrechnen. */
 :root {
-  /* Neutrales Schnittraum-Grau, an der DaVinci-Resolve-Oberfläche orientiert */
-  --bg: #222225;
-  --bg-lift: #2a2a2e;
-  --line: #45454d;
-  --line-soft: #34343a;
-  --text: #f2f2f4;
-  --text-muted: #a6a6af;
-  --text-faint: #8c8c96;
-  --accent: #43d9a3;
+  --background: 0 0% 10%;
+  --foreground: 0 0% 96%;
+  --primary: 119 99% 46%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 18%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 60%;
+  --accent: 119 99% 46%;
+  --accent-foreground: 0 0% 4%;
+  --destructive: 0 84% 60%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 119 99% 46%;
+  --nav-button: 0 0% 18%;
+  --hero-bg: 0 0% 8%;
+
+  /* Eigener Ton für die leiseste Textstufe. Der Entwurf sah dafür
+     muted-foreground bei 60 % Deckkraft vor – das ergibt nur 3,1:1
+     und fällt unter die Lesbarkeitsschwelle. */
+  --text-faint: 0 0% 54%;
+
+  --radius: 0.5rem;
+  --radius-sm: 0.125rem;
+  --font-sans: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
-  --radius: 2px;
   --max-width: 1180px;
   --gutter: 32px;
   --header-height: 68px;
   /* Harter Schnitt statt Überblendung */
   --cut: 0.1s linear;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -64,19 +96,19 @@
 html {
   scroll-behavior: smooth;
   /* Absicherung gegen horizontalen Überlauf.
-     "clip" statt "hidden", weil hidden einen Scroll-Container erzeugt
-     und damit den sticky Header brechen kann. */
+     "clip" statt "hidden", weil hidden einen Scroll-Container erzeugt. */
   overflow-x: clip;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: hsl(var(--hero-bg));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
@@ -95,8 +127,13 @@ ul {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--bg);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 3px;
 }
 
 .container {
@@ -110,28 +147,100 @@ ul {
   max-width: 900px;
 }
 
-/* ---------- Timecode ---------- */
-.tc {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  color: var(--text-faint);
-  font-variant-numeric: tabular-nums;
+/* Sprungziele unter dem fixierten Header freihalten */
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 24px);
 }
 
-/* ---------- Header ---------- */
+/* ---------- Animationen ---------- */
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.7s var(--ease-out-expo) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Wer Bewegung reduziert haben will, bekommt den Endzustand sofort */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-fade-up,
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .hero-grid span {
+    transition: none;
+  }
+}
+
+/* ---------- Header: fixiert, schwebt über dem Hero ----------
+   Der Entwurf sah eine reine Hero-Seite vor, auf der ein dauerhaft
+   transparenter Header nie mit Inhalt kollidiert. Hier folgen unter dem
+   Hero weitere Sektionen – ohne Fläche liefe deren Text sichtbar hinter
+   dem Logo durch. Deshalb: deckend als Grundzustand, und nur dort
+   transparent, wo der Browser das Aufblenden beim Scrollen beherrscht. */
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  z-index: 50;
   height: var(--header-height);
   display: flex;
   align-items: center;
-  background: rgba(34, 34, 37, 0.92);
+  background: hsl(var(--background) / 0.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+@keyframes header-lift {
+  from {
+    background-color: hsl(var(--background) / 0);
+    border-bottom-color: hsl(var(--border) / 0);
+  }
+  to {
+    background-color: hsl(var(--background) / 0.92);
+    border-bottom-color: hsl(var(--border) / 1);
+  }
+}
+
+/* Scroll-gesteuert, ohne JavaScript. Browser ohne Unterstützung
+   behalten den deckenden Grundzustand – lesbar, nur weniger elegant. */
+@supports (animation-timeline: scroll()) {
+  .site-header:not(.site-header--solid) {
+    background-color: hsl(var(--background) / 0);
+    border-bottom-color: hsl(var(--border) / 0);
+    animation: header-lift 1ms linear forwards;
+    animation-timeline: scroll(root block);
+    animation-range: 55vh 75vh;
+  }
 }
 
 .site-header .container {
@@ -139,41 +248,71 @@ ul {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: none;
+  padding: 0 2rem;
 }
 
 .logo {
   display: inline-flex;
   align-items: center;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
 }
 
 .nav-links {
   display: flex;
-  gap: 32px;
+  align-items: center;
+  gap: 2rem;
   margin: 0;
   padding: 0;
 }
 
 .nav-links a {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   transition: color var(--cut);
 }
 
 .nav-links a:hover,
 .nav-links a:focus-visible {
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 .nav-links a.active {
-  color: var(--accent);
+  color: hsl(var(--primary));
+}
+
+/* Sekundärer Button in der Kopfzeile – bewusst nicht grün,
+   damit der einzige Akzent im Hero bleibt */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  color: hsl(var(--foreground));
+  background: hsl(var(--nav-button));
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.5rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--cut), transform var(--cut);
+}
+
+.nav-cta:hover,
+.nav-cta:focus-visible {
+  background: hsl(var(--nav-button) / 0.8);
+}
+
+.nav-cta:active {
+  transform: scale(0.97);
 }
 
 .nav-toggle {
@@ -185,53 +324,230 @@ ul {
   cursor: pointer;
 }
 
+/* ---------- Hero: Vollbild, Inhalt unten links ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  background: hsl(var(--hero-bg));
+  overflow: hidden;
+  border-bottom: none;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Abdunklung: flächig wie im Entwurf, plus ein Verlauf nach unten.
+   Der Verlauf ist hier funktional, nicht dekorativ – ohne ihn steht
+   heller Text auf einem Foto mit unbekannter Helligkeit. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to top,
+      hsl(var(--hero-bg) / 0.95) 0%,
+      hsl(var(--hero-bg) / 0.88) 30%,
+      hsl(var(--hero-bg) / 0.72) 55%,
+      hsl(var(--hero-bg) / 0.32) 76%,
+      hsl(var(--hero-bg) / 0.62) 100%
+    ),
+    rgb(0 0 0 / 0.3);
+}
+
+/* Kachelraster über dem Bild, unter dem Text ----------
+   Ersetzt die interaktive Spline-3D-Szene aus dem Entwurf: 240 leere
+   Spans, weil jede Zelle einzeln auf :hover reagieren muss – ohne
+   JavaScript geht das nur über einzelne Elemente, nicht über einen
+   gezeichneten Hintergrund. Zahl bewusst durch 20, 12, 8 und 30 teilbar,
+   damit jede Rasteraufteilung unten exakt aufgeht. */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+}
+
+.hero-grid span {
+  border-right: 1px solid hsl(var(--border) / 0.45);
+  border-bottom: 1px solid hsl(var(--border) / 0.45);
+}
+
+/* Nur mit echtem Zeiger – auf Touch-Geräten bliebe der Hover sonst nach
+   dem Tippen an der zuletzt berührten Kachel "kleben".
+
+   Das Leuchten (box-shadow) ist eine bewusste, vom Nutzer nach Kenntnis
+   der Regel getroffene Ausnahme von "keine Leuchteffekte" (siehe
+   AGENTS.md, "Harte Regeln" Nr. 2 und "Gestaltungskonzept"). Es bildet
+   das Hover-Verhalten der ursprünglichen Spline-Szene nach. */
+@media (hover: hover) {
+  .hero-grid span {
+    transition: background-color var(--cut), box-shadow var(--cut);
+  }
+
+  .hero-grid span:hover {
+    position: relative;
+    z-index: 1;
+    background-color: hsl(var(--primary) / 0.18);
+    box-shadow:
+      inset 0 0 0 1px hsl(var(--primary) / 0.55),
+      0 0 18px 2px hsl(var(--primary) / 0.35);
+  }
+}
+
+/* Der Text darüber lässt Klicks zum Raster durch (wie im Entwurf via
+   pointer-events-none vorgesehen) – nur die beiden Buttons bleiben
+   bedienbar. Tastaturbedienung ist davon nicht betroffen, Tab-Fokus
+   funktioniert unverändert. Preis: der Hero-Text ist nicht mehr
+   markierbar. */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 90%;
+  padding: 8rem 1.5rem 2.5rem;
+  pointer-events: none;
+}
+
+.hero-actions a {
+  pointer-events: auto;
+}
+
+/* Eine Stufe heller als sonst: hier liegt der Timecode auf dem Foto,
+   nicht auf einer ruhigen Fläche */
+.hero-content > .tc {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.25rem;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+  margin: 0 0 0.5rem;
+}
+
+.hero h1 .accent {
+  color: hsl(var(--primary));
+}
+
+.hero .subheadline {
+  font-size: clamp(1.125rem, 2.5vw, 1.875rem);
+  line-height: 1.25;
+  font-weight: 300;
+  color: hsl(var(--foreground) / 0.8);
+  margin: 0 0 0.75rem;
+}
+
+.hero .hero-description {
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  font-weight: 300;
+  color: hsl(var(--muted-foreground));
+  margin: 0 0 1rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-trust {
+  font-size: 0.75rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: hsl(var(--text-faint));
+  margin: 1rem 0 0;
+}
+
 /* ---------- Buttons ---------- */
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.btn-outline {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 26px;
-  border-radius: var(--radius);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: background-color var(--cut), color var(--cut), border-color var(--cut);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: filter var(--cut), transform var(--cut), background-color var(--cut), border-color var(--cut), color var(--cut);
 }
 
 .btn-primary {
-  color: var(--bg);
-  background: var(--accent);
-  border: 1px solid var(--accent);
+  color: hsl(var(--primary-foreground));
+  background: hsl(var(--primary));
+  border: none;
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
-  background: transparent;
-  color: var(--accent);
+  filter: brightness(1.1);
 }
 
 .btn-secondary {
-  color: var(--text);
-  background: transparent;
-  border: 1px solid var(--line);
+  color: hsl(var(--background));
+  background: #ffffff;
+  border: none;
 }
 
 .btn-secondary:hover,
 .btn-secondary:focus-visible {
-  border-color: var(--text);
+  filter: brightness(0.9);
 }
 
-/* ---------- Sektionen: harte Schnitte, variabler Rhythmus ----------
-   Trennlinien laufen über die volle Fensterbreite, nicht nur im Container. */
+.btn-primary:active,
+.btn-secondary:active,
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
+/* Für Flächen abseits des Heros – dort wäre Weiß zu laut */
+.btn-outline {
+  color: hsl(var(--foreground));
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  font-weight: 500;
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  border-color: hsl(var(--foreground));
+}
+
+/* ---------- Sektionen: harte Schnitte, variabler Rhythmus ---------- */
 section {
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 section:last-of-type {
   border-bottom: none;
+}
+
+main > section:not(.hero),
+main > .work-section {
+  background: hsl(var(--background));
 }
 
 .sec-pad-l { padding: 130px 0; }
@@ -249,113 +565,27 @@ section:last-of-type {
 .section-title {
   font-size: clamp(1.9rem, 4vw, 2.9rem);
   line-height: 1.08;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   font-weight: 700;
   margin: 0;
 }
 
-/* ---------- Hero ---------- */
-.hero {
-  padding: 120px 0 96px;
-}
-
-.hero > .container > .tc {
-  margin-bottom: 36px;
-}
-
-.hero h1 {
-  font-size: clamp(2.6rem, 6.6vw, 5.2rem);
-  line-height: 0.98;
-  letter-spacing: -0.038em;
-  font-weight: 700;
-  margin: 0 0 30px;
-  max-width: 16ch;
-}
-
-.hero h1 .accent {
-  color: var(--accent);
-}
-
-.hero .subheadline {
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  max-width: 48ch;
-  margin: 0 0 40px;
-}
-
-/* ---------- Randabfallende Bildfläche (Cinemascope) ---------- */
-.bleed {
-  width: 100%;
-}
-
-.still {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2.39 / 1;
-  overflow: hidden;
-  background: var(--bg-lift);
-}
-
-.still img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Platzhalter, solange kein Bildmaterial vorliegt –
-   bewusst gestaltet, nicht "kaputtes Bild" */
-.still--placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* oben keine Linie – die Hero-Sektion bringt sie bereits mit */
-  border-bottom: 1px solid var(--line-soft);
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0 14px,
-      rgba(255, 255, 255, 0.03) 14px 28px
-    );
-}
-
-.still--placeholder .ph-label {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.1em;
-  /* muted statt faint: auf der helleren Flaeche sonst unter 4,5:1 */
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 2;
-  text-transform: uppercase;
-}
-
-.still--placeholder .ph-label strong {
+/* ---------- Timecode ---------- */
+.tc {
   display: block;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.caption {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  font-weight: 400;
   letter-spacing: 0.06em;
-  color: var(--text-faint);
-  padding: 12px var(--gutter) 0;
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
-/* innerhalb eines .container – der bringt die Ränder bereits mit */
-.caption--inline {
-  padding-left: 0;
-  padding-right: 0;
+  color: hsl(var(--text-faint));
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Metadaten-Block (ersetzt die Statistik-Leiste) ---------- */
 .meta-list {
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line-soft);
+  border-top: 1px solid hsl(var(--border));
 }
 
 .meta-row {
@@ -363,7 +593,7 @@ section:last-of-type {
   grid-template-columns: 160px minmax(0, 1fr);
   gap: 24px;
   padding: 20px 0;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .meta-row dt {
@@ -372,14 +602,14 @@ section:last-of-type {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
   padding-top: 4px;
 }
 
 .meta-row dd {
   margin: 0;
   font-size: 1.02rem;
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 /* ---------- Lesetext ---------- */
@@ -387,13 +617,13 @@ section:last-of-type {
   font-size: 1.3rem;
   line-height: 1.55;
   letter-spacing: -0.01em;
-  color: var(--text);
+  color: hsl(var(--foreground));
   margin: 0;
   max-width: 40ch;
 }
 
 .body-text {
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   max-width: 62ch;
   margin: 0;
 }
@@ -402,11 +632,11 @@ section:last-of-type {
   margin-top: 20px;
 }
 
-/* ---------- Leistungen / Schwerpunkte ---------- */
+/* ---------- Leistungen ---------- */
 .service-list {
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line-soft);
+  border-top: 1px solid hsl(var(--border));
 }
 
 .service-item {
@@ -414,7 +644,7 @@ section:last-of-type {
   grid-template-columns: 160px minmax(0, 24ch) minmax(0, 1fr);
   gap: 32px;
   padding: 40px 0;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
   align-items: start;
 }
 
@@ -425,15 +655,15 @@ section:last-of-type {
 .service-item h3 {
   font-size: 1.45rem;
   line-height: 1.2;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-weight: 600;
   margin: 0;
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 .service-item p {
   margin: 0;
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
 }
 
 .section-cta {
@@ -445,36 +675,30 @@ section:last-of-type {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1px;
-  background: var(--line-soft);
-  border-top: 1px solid var(--line-soft);
-  border-bottom: 1px solid var(--line-soft);
+  background: hsl(var(--border));
+  border-top: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .work-item {
-  background: var(--bg);
+  background: hsl(var(--background));
   display: block;
   transition: background-color var(--cut);
 }
 
 .work-item:hover,
 .work-item:focus-visible {
-  background: var(--bg-lift);
+  background: hsl(var(--secondary));
 }
 
 .work-thumb {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: var(--bg-lift);
+  background: hsl(var(--muted));
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0 12px,
-      rgba(255, 255, 255, 0.03) 12px 24px
-    );
 }
 
 .work-thumb img {
@@ -487,7 +711,7 @@ section:last-of-type {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.1em;
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   text-transform: uppercase;
   text-align: center;
   line-height: 1.9;
@@ -504,14 +728,31 @@ section:last-of-type {
 .work-meta h3 {
   font-size: 1rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   margin: 0;
-  color: var(--text);
+  color: hsl(var(--foreground));
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: hsl(var(--text-faint));
+  padding: 12px var(--gutter) 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* innerhalb eines .container – der bringt die Ränder bereits mit */
+.caption--inline {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* ---------- Über mich ---------- */
 .profile-hero {
-  padding: 96px 0 80px;
+  padding: calc(var(--header-height) + 72px) 0 80px;
+  background: hsl(var(--background));
 }
 
 .profile-hero .container {
@@ -538,7 +779,7 @@ section:last-of-type {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
   margin-top: 10px;
 }
 
@@ -548,8 +789,8 @@ section:last-of-type {
 
 .profile-intro h1 {
   font-size: clamp(2.3rem, 5vw, 3.6rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
   font-weight: 700;
   margin: 0 0 14px;
 }
@@ -559,10 +800,10 @@ section:last-of-type {
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   margin: 0 0 26px;
   padding-bottom: 26px;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 /* ---------- Kontakt ---------- */
@@ -588,23 +829,23 @@ section:last-of-type {
 }
 
 .connect-links svg {
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
   flex-shrink: 0;
 }
 
 .connect-links a {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--text);
-  border-bottom: 1px solid var(--line);
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
   padding-bottom: 2px;
   transition: color var(--cut), border-color var(--cut);
 }
 
 .connect-links a:hover,
 .connect-links a:focus-visible {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
 }
 
 .connect-qr {
@@ -627,12 +868,13 @@ section:last-of-type {
   font-size: 0.66rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
 }
 
 /* ---------- Footer ---------- */
 .site-footer {
-  border-top: 1px solid var(--line-soft);
+  border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
   padding: 64px 0 36px;
 }
 
@@ -648,7 +890,7 @@ section:last-of-type {
 }
 
 .footer-brand p {
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
   font-size: 0.9rem;
   max-width: 34ch;
   margin: 0;
@@ -660,7 +902,7 @@ section:last-of-type {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
   margin: 0 0 18px;
 }
 
@@ -676,7 +918,7 @@ section:last-of-type {
 
 .social-links a,
 .legal-links a {
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   font-size: 0.92rem;
   transition: color var(--cut);
 }
@@ -685,21 +927,22 @@ section:last-of-type {
 .social-links a:focus-visible,
 .legal-links a:hover,
 .legal-links a:focus-visible {
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--line-soft);
+  border-top: 1px solid hsl(var(--border));
   padding-top: 26px;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
-  color: var(--text-faint);
+  color: hsl(var(--text-faint));
 }
 
 /* ---------- Rechtsseiten ---------- */
 .legal-page {
-  padding: 64px 0 104px;
+  padding: calc(var(--header-height) + 48px) 0 104px;
+  background: hsl(var(--background));
 }
 
 .legal-page .container {
@@ -711,40 +954,39 @@ section:last-of-type {
   align-items: center;
   gap: 8px;
   margin-bottom: 44px;
-  font-family: var(--font-mono);
   font-size: 0.74rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   transition: color var(--cut);
 }
 
 .back-link:hover,
 .back-link:focus-visible {
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 .legal-page h1 {
   font-size: clamp(2rem, 4vw, 2.7rem);
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   font-weight: 700;
   margin: 0 0 44px;
   padding-bottom: 26px;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .legal-page h2 {
   font-size: 1.12rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: hsl(var(--foreground));
   margin: 44px 0 14px;
 }
 
 .legal-page p,
 .legal-page li {
-  color: var(--text-muted);
+  color: hsl(var(--muted-foreground));
   font-size: 1rem;
   max-width: 68ch;
 }
@@ -759,26 +1001,82 @@ section:last-of-type {
 }
 
 .legal-page a {
-  color: var(--text);
-  border-bottom: 1px solid var(--line);
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
   transition: color var(--cut), border-color var(--cut);
 }
 
 .legal-page a:hover,
 .legal-page a:focus-visible {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
 }
 
 /* ---------- Responsive ---------- */
+@media (min-width: 640px) {
+  .hero-content {
+    max-width: 28rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    padding: 8rem 2.5rem 2.5rem;
+  }
+
+  .hero h1 {
+    margin-bottom: 1rem;
+  }
+
+  .hero .subheadline {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero .hero-description {
+    margin-bottom: 2rem;
+  }
+
+  .hero-trust {
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 1rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header .container {
+    padding: 0 4rem;
+  }
+
+  .hero-content {
+    max-width: 42rem;
+  }
+}
+
+/* Kachelraster: die Aufteilung wechselt mit der Fensterbreite, die
+   Gesamtzahl von 240 Zellen bleibt gleich (20×12 / 12×20 / 8×30) –
+   so bleiben die Kacheln auf jeder Breite ungefähr quadratisch. */
+@media (max-width: 1023px) {
+  .hero-grid {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-grid {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(30, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .sec-pad-l { padding: 84px 0; }
   .sec-pad-m { padding: 68px 0; }
   .sec-pad-s { padding: 52px 0; }
-
-  .hero {
-    padding: 72px 0 64px;
-  }
 
   .profile-hero .container,
   .connect-card {
@@ -821,9 +1119,8 @@ section:last-of-type {
     --gutter: 22px;
   }
 
-  .still {
-    /* auf dem Handy ist 2.39:1 zu flach */
-    aspect-ratio: 16 / 9;
+  .site-header .container {
+    padding: 0 var(--gutter);
   }
 
   .meta-row {
@@ -831,8 +1128,8 @@ section:last-of-type {
     gap: 4px;
   }
 
-  .hero > .container > .tc {
-    margin-bottom: 26px;
+  .nav-cta {
+    display: none;
   }
 
   .nav-toggle-label {
@@ -842,9 +1139,11 @@ section:last-of-type {
     width: 40px;
     height: 40px;
     font-size: 1.4rem;
-    color: var(--text);
+    color: hsl(var(--foreground));
   }
 
+  /* Aufgeklapptes Menü braucht eine deckende Fläche –
+     der Header selbst ist transparent */
   .nav-links {
     position: absolute;
     top: var(--header-height);
@@ -852,8 +1151,9 @@ section:last-of-type {
     right: 0;
     flex-direction: column;
     gap: 0;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    align-items: stretch;
+    background: hsl(var(--background));
+    border-bottom: 1px solid hsl(var(--border));
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease;
@@ -861,7 +1161,7 @@ section:last-of-type {
 
   .nav-links li {
     width: 100%;
-    border-top: 1px solid var(--line-soft);
+    border-top: 1px solid hsl(var(--border));
   }
 
   .nav-links a {
